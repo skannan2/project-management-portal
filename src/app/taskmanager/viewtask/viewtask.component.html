@@ -1,0 +1,104 @@
+<div class="row">&nbsp;</div>
+<form [formGroup]="mainForm">
+    <div class="form-group row">
+        <div class="col-sm-1">
+            <label for="task">Task:</label>
+        </div>
+        <div class="col-sm-5">
+            <input type="text" id="task" class="form-control" formControlName="taskName">
+        </div>
+        <div class="col-sm-1">
+            <label for="parenttask">Parent Task:</label>
+        </div>
+        <div class="col-sm-5">
+            <input type="text" id="parenttask" class="form-control" formControlName="parentTaskName">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-1">
+            <label for="priorityfrom">Priority From:</label>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" id="priorityfrom" class="form-control" formControlName="priority">
+        </div>
+        <div class="col-sm-1">
+            <label for="priorityto">Priority To:</label>
+        </div>
+        <div class="col-sm-2">
+            <input type="text" id="priorityto" class="form-control" formControlName="priority">
+        </div>
+        <div class="col-sm-1">
+            <label for="startdate">Start Date:</label>
+        </div>
+
+        <div class="col-sm-2">
+            <input type="text" id="startdate" class="form-control" formControlName="startDate">
+        </div>
+        <div class="col-sm-1">
+            <label for="enddate">End Date:</label>
+        </div>
+
+        <div class="col-sm-2">
+            <input type="text" id="enddate" class="form-control" formControlName="endDate">
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="form-group row">
+        <div class="col-1">
+            <label for="project">Project:</label>
+        </div>
+        <div class="col-3">
+            <input type="text" class="form-control" formControlName="project" required id="project" name="project"
+                   [(ngModel)]="task.project">
+        </div>
+        <div class="col-1">
+            <button type="button" class="btn btn-secondary" (click)="openProjectPopup()">Search</button>
+            <input type="hidden" class="form-control" formControlName="projectId" required id="projectId"
+                   name="projectId" [(ngModel)]="task.projectId" (ngModelChange)="loadTaskByProject(task.projectId)">
+        </div>
+        <div class="col-2">
+            <label>Sort Task By:</label>
+        </div>
+        <div>
+            <button type="button" class="btn btn-outline-dark" (click)="sort('startDate')">Start Date</button>
+        </div>
+        <div>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('endDate')">End Date</button>
+        </div>
+        <div>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('priority')">Priority</button>
+        </div>
+        <div>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('startDate')">Completed</button>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Task</th>
+                <th scope="col">Parent</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of data; let i = index;" (mouseover)="highlightRow(task)"
+            [ngClass] = "{'highlight' : task.task == selectedName}">          
+                <td>{{task.task}}</td>
+                <td>{{task.parentTaskTbl.parentTask}}</td>
+                <td>{{task.priority}}</td>
+                <td>{{task.startDate | date:'shortDate'}}</td>
+                <td>{{task.endDate | date:'shortDate'}}</td>
+                <td>
+                    <button type="button" class="btn btn-secondary btn-sm" (click)="editTask(task)">Edit</button>&nbsp;
+                    <button type="button" class="btn btn-secondary btn-sm" (click)="deleteTask(task.taskId)">End Task</button>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</form>

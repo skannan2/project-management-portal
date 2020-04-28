@@ -1,0 +1,127 @@
+<div class="row">&nbsp;</div>
+<div [hidden]="submitted" style="width: 400px;"></div>
+<form [formGroup]="mainForm">
+    <div class="form-group row">
+        <div class="col-2">
+            <label for="project">Project:</label>
+        </div>
+        <div class="col-4">
+            <input id="project" name="project" type="text" class="form-control" formControlName="project" required [(ngModel)]="project.projectName">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+
+        </div>
+        <div class="col-4">
+
+            <label class="checkbox-inline"><input type="checkbox" (change)="setDefaultDates($event.target.checked);"> Set Start and End Date</label>
+
+            <input class="form-control" required style="display:unset;width:85%" id="startDate" formControlName="startDate" name="startDate"
+                   [matDatepicker]="picker" [(ngModel)]="project.startDate">
+            <mat-datepicker-toggle class="mat-datepicker-toggle-active" matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            <input class="form-control" required style="display:unset;width:85%" id="endDate" formControlName="endDate" name="endDate"
+                   [matDatepicker]="endDate" [(ngModel)]="project.endDate">
+            <mat-datepicker-toggle class="mat-datepicker-toggle-active" matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label for="priority">Priority:</label>
+        </div>
+        <div class="col-4">
+            <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+            <input type="range" class="border-0" min="0" max="30" formControlName="priority" class="form-control" id="priority"
+                   name="priority" [(ngModel)]="project.priority" [value]="0" (input)="priority.value" #priority>
+            <span class="font-weight-bold indigo-text ml-2 mt-1">{{ priority.value }}</span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label for="manager">Manager:</label>
+        </div>
+        <div class="col-3">
+            <input type="text" class="form-control"  formControlName="manager" required id="manager" name="manager" [(ngModel)]="project.manager">
+        </div>
+        <div class="col-1">
+            <button type="button" class="btn btn-secondary" (click)="open()">Search</button>
+            <input type="hidden" class="form-control" formControlName="managerId" required id="managerId" name="managerId" [(ngModel)]="project.managerId">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2">&nbsp;</div>
+        <div class="col-4">
+            <button type="button" *ngIf="!this.isEditBtn" class="btn btn-secondary" [disabled]="mainForm.invalid" (click)="onSubmit(project);">Add Project</button>&nbsp;
+            <button type="button" *ngIf="this.isEditBtn" class="btn btn-secondary" [disabled]="mainForm.invalid" (click)="onSubmit(project);">Edit Project</button>&nbsp;
+
+            <button type="button" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-2">
+            <label for="search">Search:</label>
+        </div>
+        <div class="col-4">
+            <input type="text"  id="search" name="search" formControlName="search"  [(ngModel)]="term" autocomplete="off">
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-2">
+            <label for="sortby">Sort By:</label>
+        </div>
+        <div class="col-5">
+            <button type="button" class="btn btn-outline-dark" (click)="sort('startDate')">Start Date</button>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('endDate')">End Date</button>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('priority')">Priority</button>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('startDate')">Completed</button>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Project Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Priority</th>
+            <th scope="col">No of Tasks</th>
+            <th scope="col">Completed</th>
+            <th scope="col">Manager</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let project of data | filter:term" (mouseover)="highlightRow(project)"
+            [ngClass] = "{'highlight' : project.projectId == selectedName}">
+            <td>{{project.projectName}}</td>
+            <td>{{project.startDate}}</td>
+            <td>{{project.endDate}}</td>
+            <td>{{project.priority}}</td>
+            <td>{{project.taskCount}}</td>
+            <td>{{project.completeCount}}</td>
+            <td>{{project.manager}}</td>
+            <td>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="editProject(project)">Edit</button>&nbsp;
+                <button type="button" class="btn btn-secondary btn-sm" (click)="deleteProject(project.projectId)">Delete</button>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
+</form>
+<div [hidden]="!submitted">
+    <h4>You submitted successfully!</h4>
+    <!-- <button class="btn btn-success" (click)="newEmployee()">Add</button> -->
+</div>
+
+

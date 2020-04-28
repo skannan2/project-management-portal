@@ -1,0 +1,88 @@
+<div class="row">&nbsp;</div>
+<div [hidden]="submitted" style="width: 400px;"></div>
+<form [formGroup]="mainForm">
+    <div class="form-group row">
+        <div class="col-2">
+            <label for="firstName">First Name:</label>
+        </div>
+        <div class="col-4">
+            <input id="firstName" name="firstName" type="text" class="form-control" formControlName="firstName" required [(ngModel)]="user.firstName">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label for="lastName">Last Name:</label>
+        </div>
+        <div class="col-4">
+            <input type="text" class="form-control" required id="lastName" name="lastName" formControlName="lastName" [(ngModel)]="user.lastName">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label for="userName">User ID:</label>
+        </div>
+        <div class="col-4">
+            <input type="text" class="form-control" required id="userName" name="userName" formControlName="userName" [(ngModel)]="user.userName">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">&nbsp;</div>
+        <div class="col-4">
+            <button type="button" *ngIf="!this.isEditBtn" [disabled]="mainForm.invalid" class="btn btn-secondary" (click)="onSubmit(user);">Add User</button>&nbsp;
+            <button type="button" *ngIf="this.isEditBtn" class="btn btn-secondary" (click)="onSubmit(user);">Edit User</button>&nbsp;
+            <button type="button" class="btn btn-secondary" (click)="clearFields();">Reset</button>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="justify-content-start">&nbsp;
+            <label for="search">Search:</label>
+        </div>
+        <div>&nbsp;
+            <input type="text"  id="search" name="search" formControlName="search"  [(ngModel)]="term" autocomplete="off">
+        </div>
+        <div>&nbsp;
+            <label>Sort:</label>
+        </div>
+        <div>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('firstName')">First Name</button>
+        </div>
+        <div>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('lastName')">Last Name</button>
+        </div>
+        <div>&nbsp;
+            <button type="button" class="btn btn-outline-dark" (click)="sort('userName')">ID</button>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">User Name</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of data | filter:term" (mouseover)="highlightRow(user)"
+            [ngClass] = "{'highlight' : user.userId == selectedName}">
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.userName}}</td>
+            <td>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="editUser(user)">Edit</button>&nbsp;
+                <button type="button" class="btn btn-secondary btn-sm" (click)="deleteUser(user.userId)">Delete</button>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
+</form>
+<div [hidden]="!submitted">
+    <h4>You submitted successfully!</h4>
+    <!-- <button class="btn btn-success" (click)="newEmployee()">Add</button> -->
+</div>
+
+
